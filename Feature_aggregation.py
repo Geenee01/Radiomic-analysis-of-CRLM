@@ -6,15 +6,15 @@ import os
 from sklearn.preprocessing import StandardScaler
 
 # base path to folder
-Base_path = "C:/Users/Hemangini/Desktop/MCRCdata/Analysis0-300/"
+Base_path = "path/to/saved-data"
  
 # load radiomic data
-radiomics_data = pd.read_csv(Base_path + "extracted_radiomic_features_0-300.csv")
+radiomics_data = pd.read_csv(Base_path + "radiomic.csv")
 
 # load clinical data
-clinical_data_df = pd.read_excel(Base_path + "CRLM Clinical data.xlsx")
+clinical_data_df = pd.read_excel(Base_path + "clinical.xlsx")
 
-# create list of columns starting with 'original' (copied from brain_metastases)
+# create list of columns starting with 'original' 
 value_feature_names = [col for col in radiomics_data.columns if (col.startswith('original'))] + [col for col in radiomics_data.columns if (col.startswith('wavelet'))]
 
 # Creating new df "radiomics_d" to store patient ID and tumor Id with features' name
@@ -77,24 +77,17 @@ UWA_df.reset_index(inplace=True)
 UWA_df = UWA_df.drop('patient ID', axis=1)
 
 # save radiomic features for feature selection
-UWA_radiomic_Ofile = Base_path + 'UWA_radiomic_aggregation.csv'
+UWA_radiomic_Ofile = Base_path + 'UWA_aggregation.csv'
 UWA_df.to_csv(UWA_radiomic_Ofile, index=True)
 
-## restore dictonary##
-# restore column names
-#inv_col_names = {v: k for k, v in col_names.items()}
 
-
-# save the dictionary
-#np.save(Base_path + 'colnames.npy', inv_col_names, allow_pickle=True)
-#print(inv_col_names_with_start_index_1)
 
 
 ### WA ###
 
 # radiomic_d copy to new df
 rad_df = radiomics_d.copy()
-# calculating total volume per patient
+# calculating total volume per patien
 total_volume = rad_df[['patient ID', 'original_shape_MeshVolume']].copy()
 total_volume = total_volume.groupby('patient ID').sum()
 
@@ -152,7 +145,7 @@ WA_df.reset_index(inplace=True)
 WA_df = WA_df.drop('patient ID', axis=1)
 
 # save radiomic features for feature selection
-WA_radiomic_Ofile = Base_path + 'WA_radiomic_aggregation.csv'
+WA_radiomic_Ofile = Base_path + 'WA_aggregation.csv'
 WA_df.to_csv(WA_radiomic_Ofile, index=True)
 
 
@@ -220,8 +213,8 @@ largest_3_df.reset_index(inplace=True)
 largest_3_df = largest_3_df.drop('patient ID', axis=1)
 
 # save radiomic features for feature selection
-largest3_radiomic_Ofile = Base_path + 'largest3_radiomic_aggregation.csv'
-largest_3_df.to_csv(largest3_radiomic_Ofile, index=True)
+largest3_radiomic_Ofile = Base_path + 'largest3_aggregation.csv'
+largest_3_df.to_csv(largest3_radiomic_file, index=True)
 
 
 
