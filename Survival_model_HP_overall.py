@@ -30,7 +30,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 # Base path to selceted top10 feature csvs folder
-Base_path = "C:/Users/Hemangini/Desktop/MCRCdata/Analysis0-300/hep_overall_survival_f10/"
+Base_path = "path/to/features"
 
 # csv files with 10 selected radiomic features and 'time' and 'event' data for whole dataset
 # have different files for largest 1 with numbers of tumors and laregst 1 with total volume of tumors
@@ -255,35 +255,36 @@ def RSF_Bootstrap(file_path, num=False, vol=False):
 
 # Cox Proportional Hazards
 
-#CPH_Bootstrap(UWA_top10)
-#CPH_Bootstrap(WA_top10)
-#CPH_Bootstrap(largest3_top10)
-#CPH_Bootstrap(largest1_top10)
-#CPH_Bootstrap(largest1_top10, num=True)
-#CPH_Bootstrap(largest1_top10_vol, vol=True)
-#CPH_Bootstrap(smallest1_top10)
+CPH_Bootstrap(UWA_top10)
+CPH_Bootstrap(WA_top10)
+CPH_Bootstrap(largest3_top10)
+CPH_Bootstrap(largest1_top10)
+CPH_Bootstrap(largest1_top10, num=True)
+CPH_Bootstrap(largest1_top10_vol, vol=True)
+CPH_Bootstrap(smallest1_top10)
 
 
 # Cox Proportional Hazards with Lasso Regularization
 
-#Lasso_CPH_Bootstrap(UWA_top10)
-#Lasso_CPH_Bootstrap(WA_top10)
-#Lasso_CPH_Bootstrap(largest3_top10)
-#Lasso_CPH_Bootstrap(largest1_top10) # need to remove alphas from [0.005] to [0.045]
-#Lasso_CPH_Bootstrap(largest1_top10, num=True)
-#Lasso_CPH_Bootstrap(largest1_top10_vol, vol=True)
-#Lasso_CPH_Bootstrap(smallest1_top10)
+Lasso_CPH_Bootstrap(UWA_top10)
+Lasso_CPH_Bootstrap(WA_top10)
+Lasso_CPH_Bootstrap(largest3_top10)
+Lasso_CPH_Bootstrap(largest1_top10) # need to remove alphas from [0.005] to [0.045]
+Lasso_CPH_Bootstrap(largest1_top10, num=True)
+Lasso_CPH_Bootstrap(largest1_top10_vol, vol=True)
+Lasso_CPH_Bootstrap(smallest1_top10)
 
 
 # RSF: Random Survival Forest
-'''RSF_Bootstrap(UWA_top10)
+RSF_Bootstrap(UWA_top10)
 RSF_Bootstrap(WA_top10)
 RSF_Bootstrap(largest3_top10)
 RSF_Bootstrap(largest1_top10)
 RSF_Bootstrap(largest1_top10, num=True)
 RSF_Bootstrap(largest1_top10_vol, vol=True)
-RSF_Bootstrap(smallest1_top10)'''
-"""
+RSF_Bootstrap(smallest1_top10)
+
+# visualize the results for comparison
 metrics_UWA, cph = CPH_Bootstrap(UWA_top10)
 metrics_WA, cph = CPH_Bootstrap(WA_top10)
 metrics_largest3, cph = CPH_Bootstrap(largest3_top10)
@@ -297,43 +298,16 @@ data = {'UWA': metrics_UWA, 'WA': metrics_WA, 'Largest3': metrics_largest3, 'Lar
 
 df = pd.DataFrame(data)
 df.to_csv(Base_path + 'CPH_metrics.csv', index=False)
-"""
+
 data = pd.read_csv(Base_path + 'CPH_metrics.csv')
 df_for_plt ={ 'Unweighted average': data['UWA'], 'Weighted average': data['WA'], 'Largest3': data['Largest3'], 'Largest1_vol': data['Largest1_vol'], 'Largest1_num': data['Largest1_num'], 'Largest1': data['Largest1'],'Smallest1': data['Smallest1']}
-# Plot violin plot
+
+#Plot violin plot
 #plt.axvline(x=uni_dict[dataName],linestyle='--',color='black')
-'''sns.violinplot(data=df_for_plt,orient='h',palette='dark')
+sns.violinplot(data=df_for_plt,orient='h',palette='dark')
 plt.xlabel('Concordance Index (C-Index)')
 plt.ylabel('Method')
 plt.title('CPH Model for Overall Survival with single tumors(197 patients)')
-# plt.savefig('testing.png',dpi=200,bbox_inches='tight')
-plt.show()'''
-
-# Plot a horizontal box plot with observed values
-#sns.boxplot(data=df_for_plt,orient='h',palette='pastel')
-#sns.stripplot(data=df_for_plt,orient='h',color='black')
-#sns.swarmplot(data=df_for_plt,orient='h',color='white')
-
-#sns.violinplot(data=df_for_plt,orient='h',palette='pastel')
-#sns.swarmplot(data=df_for_plt,orient='h',color='black')
-#sns.boxenplot(data=df_for_plt,orient='h',palette='vlag')
-
-# ridge plots for all the mthods in same figure in separate subplots
-fig, axs = plt.subplots(1, 1, figsize=(10, 5))
-#sns.violinplot(data=df_for_plt,orient='h',palette='rocket', ax=axs)
-#sns.histplot(data=df_for_plt,ax=axs)
-##sns.stripplot(data=df_for_plt,orient='h',palette= 'rocket', ax=axs, dodge=True, alpha=.2, legend=False)
-#sns.pointplot(data=df_for_plt,orient='h',palette='dark', ax=axs, dodge=.4, linestyle="none", errorbar=None, marker="_", markersize=20, markeredgewidth=3)
-#sns.pointplot(data=df_for_plt,orient='h',palette='rocket', ax=axs, dodge=.4, capsize=.4, linestyle="none", marker="D") # good one
-sns.pointplot(data=df_for_plt,orient='h',palette='rocket', ax=axs, errorbar=("pi", 100), capsize=.4, linestyle="none", marker="D")
-#sns.barplot(data=df_for_plt,orient='h',palette='rocket', ax=axs)
-#sns.boxplot(data=df_for_plt,orient='h',palette='rocket', ax=axs)
-#sns.boxenplot(data=df_for_plt,orient='h',palette='rocket', ax=axs)
-#sns.kdeplot(data=df_for_plt,color='pink', ax=axs)
-
-plt.xlabel('Concordance Index (C-Index)')
-plt.ylabel('Method')
-plt.title('CPH Model for Overall Survival with single tumors(197 patients)')
-plt.savefig(Base_path + 'CPH_model_strippointtplot.png',dpi=200,bbox_inches='tight')
-
+plt.savefig('testing.png',dpi=200,bbox_inches='tight')
 plt.show()
+
