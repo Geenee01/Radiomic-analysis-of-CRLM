@@ -5,22 +5,20 @@ import pandas as pd
 import os
 
 # defining Base path, input path for mrmr seleceted features and output paths
-Base_path = "C:/Users/Hemangini/Desktop/MCRCdata/Analysis0-300/"
-Base_path_mrmr = "C:/Users/Hemangini/Desktop/MCRCdata/Analysis0-300/mrmr_overall_survival/"
-Base_path_o ="C:/Users/Hemangini/Desktop/MCRCdata/Analysis0-300/hep_overall_survival_f10/"
+Base_path = "path/to/saved-data"
+Base_path_mrmr = "path/to/mrmr-data"
+Base_path_o ="path/to save/output/files"
 
 # loading and reading necessary files and dictionaries
-Clinical_df = pd.read_excel(Base_path + "CRLM Clinical data.xlsx")
-#print(Clinical_df)
-#inv_col_names = np.load(Base_path + 'colnames.npy', allow_pickle=True).item()
+Clinical_df = pd.read_excel(Base_path + "clinical.xlsx")
 totalL1_vol_dic = np.load(Base_path + 'totalL1voldic.npy', allow_pickle=True).item()
-#print(inv_col_names)
+
 
 
 ### UWA ###
 
 # load radiomic features data
-UWA_df = pd.read_csv(Base_path + "UWA_radiomic_aggregation.csv", index_col=0)
+UWA_df = pd.read_csv(Base_path + "UWA_aggregation.csv", index_col=0)
 #print(UWA_df)
 # load mrmr data
 UWA_mrmr_indices = pd.read_csv(Base_path_mrmr + "UWA_10features_mRMR.csv")
@@ -38,8 +36,8 @@ print("UWA features:",UWA_mRMRe.columns)
 
 # adding 'Time' and 'Event' columns accoding to index column
 
-UWA_mRMRe["Time"]=Clinical_df["overall_survival_months"].astype(float)
-UWA_mRMRe["Event"]=Clinical_df["vital_status"].astype(int)
+UWA_mRMRe["Time"]=Clinical_df["overall surv months"].astype(float)
+UWA_mRMRe["Event"]=Clinical_df["fu status"].astype(int)
 print(UWA_mRMRe)
 
 # Save the selected data to a new CSV
@@ -49,7 +47,7 @@ UWA_mRMRe.to_csv(Base_path_o + 'UWA_f10.csv', index=False)
 ### WA ###
 
 # load data
-WA_df = pd.read_csv(Base_path + "WA_radiomic_aggregation.csv", index_col=0)
+WA_df = pd.read_csv(Base_path + "WA_aggregation.csv", index_col=0)
 WA_mrmr_indices = pd.read_csv(Base_path_mrmr + "WA_10features_mRMR.csv")
 
 # making list of column indices
@@ -63,12 +61,12 @@ WA_mRMRe = WA_df[WA_mrmr_indices].copy()
 print("WA features:",WA_mRMRe.columns)
 
 # adding 'Time' and 'Event' columns by mapping the values from clinical data accordning to patient ID
-WA_mRMRe["Time"]=WA_mRMRe.index.to_series().map(Clinical_df.set_index('Patient-ID')['overall_survival_months'])
-WA_mRMRe["Event"]=WA_mRMRe.index.to_series().map(Clinical_df.set_index('Patient-ID')['vital_status'].astype(int))
+WA_mRMRe["Time"]=WA_mRMRe.index.to_series().map(Clinical_df.set_index('Patient-ID')['overall surv months'])
+WA_mRMRe["Event"]=WA_mRMRe.index.to_series().map(Clinical_df.set_index('Patient-ID')['fu status'].astype(int))
 
 # adding 'Time' and 'Event' columns
-WA_mRMRe["Time"]=Clinical_df["overall_survival_months"]
-WA_mRMRe["Event"]=Clinical_df["vital_status"].astype(int)
+WA_mRMRe["Time"]=Clinical_df["overall surv months"]
+WA_mRMRe["Event"]=Clinical_df["fu status"].astype(int)
 #print(WA_mRMRe)
 
 # Save the selected data to a new CSV
@@ -79,7 +77,7 @@ WA_mRMRe.to_csv(Base_path_o + 'WA_f10.csv', index=False)
 ### largest3 ###
 
 # load data
-largest3_df = pd.read_csv(Base_path + "largest3_radiomic_aggregation.csv", index_col=0)
+largest3_df = pd.read_csv(Base_path + "largest3_aggregation.csv", index_col=0)
 largest3_mrmr_indices = pd.read_csv(Base_path_mrmr + "largest3_10features_mRMR.csv")
 
 # making list of column indices
@@ -94,8 +92,8 @@ largest3_mRMRe = largest3_df[largest3_mrmr_indices].copy()
 print("largest3 features:",largest3_mRMRe.columns)
 
 # adding 'Time' and 'Event' columns
-largest3_mRMRe["Time"]=Clinical_df["overall_survival_months"]
-largest3_mRMRe["Event"]=Clinical_df["vital_status"].astype(int)
+largest3_mRMRe["Time"]=Clinical_df["overall surv months"]
+largest3_mRMRe["Event"]=Clinical_df["fu status"].astype(int)
 
 # Save the selected data to a new CSV
 largest3_mRMRe.to_csv(Base_path_o + 'largest3_f10.csv', index=False)
@@ -118,15 +116,15 @@ largest1_mRMRe = largest1_df[largest1_mrmr_indices].copy()
 print("largest1 features:",largest1_mRMRe.columns)
 
 # adding 'Time' and 'Event' columns
-largest1_mRMRe["Time"]=Clinical_df["overall_survival_months"]
-largest1_mRMRe["Event"]=Clinical_df["vital_status"].astype(int)
+largest1_mRMRe["Time"]=Clinical_df["overall surv months"]
+largest1_mRMRe["Event"]=Clinical_df["fu status"].astype(int)
 
 # adding 'tumor_num' column
 largest1_num = largest1_mRMRe.copy()
 #print(largest1_num)
 
 # a folder where all the CT scan images volume and segments are stored
-data_folders = "C:/Users/Hemangini/Desktop/MCRCdata/MCRC"
+data_folders = "path/to/data"
 
 # to create list of number of tumors in each patient file
 tumor_num_list=[]
@@ -176,8 +174,8 @@ smallest1_mRMRe = smallest1_df[smallest1_mrmr_indices].copy()
 print("smallest1 features:",smallest1_mRMRe.columns)
 
 # adding 'Time' and 'Event' columns
-smallest1_mRMRe["Time"]=Clinical_df["overall_survival_months"]
-smallest1_mRMRe["Event"]=Clinical_df["vital_status"].astype(int)
+smallest1_mRMRe["Time"]=Clinical_df["overall surv months"]
+smallest1_mRMRe["Event"]=Clinical_df["fu status"].astype(int)
 
 # Save the selected data to a new CSV
 smallest1_mRMRe.to_csv(Base_path_o + 'smallest1_f10.csv', index=False)
