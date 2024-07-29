@@ -19,14 +19,14 @@ formatter = logging.Formatter('%(levelname)s:%(name)s: %(message)s')
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 
-Base_path = "C:/Users/Hemangini/Desktop/MCRCdata/"
+Base_path = "path/to/data"
 Nii_path = Base_path 
 
 # Folder path
 data_folders = Base_path + "MCRC"
 
 # Initialize the PyRadiomics feature extractor
-params = "C:/Users/Hemangini/Desktop/MCRCdata/Analysis/Code/Params.yml"
+params = "path/to/Params.yml"
 extractor = featureextractor.RadiomicsFeatureExtractor(params)
 
 # An empty DataFrame 
@@ -79,7 +79,6 @@ for folder in os.listdir(data_folders):
             radiomic_data = pd.concat([radiomic_data, folder_data], ignore_index=True)
 
 # Save the radiomic features to a CSV file
-output_csv_path = Base_path + "Analysis/extracted_radiomic_features_0-300.csv"
+output_csv_path = Base_path + "radiomic.csv"
 radiomic_data.to_csv(output_csv_path, index=False)
 
-print("Completed")
